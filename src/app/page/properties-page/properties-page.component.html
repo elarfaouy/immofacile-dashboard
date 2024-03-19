@@ -1,8 +1,9 @@
 <div class="flex justify-between mb-12">
   <div class="flex gap-4 items-center">
     <label for="filter">Filter by Status : </label>
-    <select id="filter" class="p-2 w-64 rounded-md border border-neutral-500 focus:outline-none">
-      <option value="all">All</option>
+    <select id="filter" class="p-2 w-64 rounded-md border border-neutral-500 focus:outline-none"
+            [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+      <option value="">All</option>
       <option value="AVAILABLE">Available</option>
       <option value="CANCELLED">Cancelled</option>
       <option value="PENDING">Pending</option>
@@ -11,7 +12,6 @@
       <option value="ARCHIVED">Archived</option>
     </select>
   </div>
-  <button mat-raised-button color="primary" (click)="openBottomSheet()">Add Competition</button>
 </div>
 
 <div class="mat-elevation-z8">
@@ -19,56 +19,70 @@
 
     <!-- Position Column -->
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef> Id. </th>
-      <td style="cursor: pointer" mat-cell *matCellDef="let element" [routerLink]="['/competition/result', element.code]"> {{element.code}} </td>
+      <th mat-header-cell *matHeaderCellDef> Id.</th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
-      <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Type</th>
+      <td mat-cell *matCellDef="let element"> {{element.type}} </td>
     </ng-container>
 
     <!-- Weight Column -->
     <ng-container matColumnDef="address">
-      <th mat-header-cell *matHeaderCellDef> Address </th>
-      <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
+      <th mat-header-cell *matHeaderCellDef> Address</th>
+      <td mat-cell *matCellDef="let element"> {{element.address}} </td>
     </ng-container>
 
     <!-- Symbol Column -->
     <ng-container matColumnDef="area">
-      <th mat-header-cell *matHeaderCellDef> Area </th>
-      <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Area</th>
+      <td mat-cell *matCellDef="let element"> {{element.area}} </td>
     </ng-container>
 
     <!-- Symbol Column -->
     <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
-      <td mat-cell *matCellDef="let element"> {{element.location}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Price</th>
+      <td mat-cell *matCellDef="let element"> {{element.price}} </td>
     </ng-container>
 
     <!-- Symbol Column -->
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <th mat-header-cell *matHeaderCellDef> Status</th>
       <td mat-cell *matCellDef="let element">
-        <span class="badge" [ngClass]="{
-          'badge-archived': element.status == 'COMPLETED',
-          'badge-ongoing': element.status == 'ONGOING',
-          'badge-upcoming': element.status == 'UPCOMING',}">{{element.status}}</span>
+        <span class="py-1 px-3 text-sm rounded-xl text-white" [ngClass]="{
+          'bg-green-500': element.status == 'AVAILABLE',
+          'bg-red-500': element.status == 'CANCELLED',
+          'bg-yellow-500': element.status == 'PENDING',
+          'bg-blue-500': element.status == 'REJECTED',
+          'bg-purple-500': element.status == 'SUSPENDED',
+          'bg-gray-500': element.status == 'ARCHIVED',}">{{element.status}}</span>
       </td>
     </ng-container>
 
     <!-- Symbol Column -->
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
-      <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+      <th mat-header-cell *matHeaderCellDef> Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]"
+  <mat-paginator [pageSizeOptions]="[1, 2, 3, 5, 10, 20, 50]"
+                 [pageSize]="pageEvent.pageSize"
+                 [pageIndex]="pageEvent.pageIndex"
+                 [length]="pageEvent.length"
+                 (page)="handlePageEvent($event)"
                  showFirstLastButtons
                  aria-label="Select page of periodic elements">
   </mat-paginator>

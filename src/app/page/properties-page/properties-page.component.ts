@@ -1,10 +1,14 @@
 import {Component, ViewChild} from '@angular/core';
-import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
-import {MatPaginator} from "@angular/material/paginator";
+import {PageEvent} from "@angular/material/paginator";
 import {MatSort, Sort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
-import {Subscription} from "rxjs";
+import {Observable} from "rxjs";
+import {select, Store} from "@ngrx/store";
+import {PropertyActions} from "../../property/actions/property.actions";
+import {PropertyInterface} from "../../property/models/Property.interface";
+import {selectPropertyPageable} from "../../property/selectors/property.selectors";
+import {PageablePropertiesInterface} from "../../property/models/PageableProperties.interface";
 
 @Component({
   selector: 'app-properties-page',
@@ -12,33 +16,52 @@ import {Subscription} from "rxjs";
   styleUrl: './properties-page.component.css'
 })
 export class PropertiesPageComponent {
-  private _sub!: Subscription;
-  statusFilter: string = "";
+  pageEvent: {
+    pageIndex: number;
+    pageSize: number;
+    length: number;
+  } = {pageIndex: 0, pageSize: 2, length: 0};
+  properties: PropertyInterface[] = [];
+  pageable: Observable<PageablePropertiesInterface | null> = this.store.pipe(select(selectPropertyPageable));
+  selectedStatus: string = "";
   displayedColumns: string[] = ["id", "type", "address", "area", "price", "status", "actions"];
-  competitions: any[] = [];
-  dataSource = new MatTableDataSource<any>(this.competitions);
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-              private _bottomSheet: MatBottomSheet,
-              private _liveAnnouncer: LiveAnnouncer,) {
+    private store: Store,
+    private _liveAnnouncer: LiveAnnouncer,) {
   }
 
   ngOnInit(): void {
-    // this._sub = this._competitionService.getCompetitions().subscribe(
-    //   data => {
-    //     this.competitions = data.content;
-    //     this.dataSource = new MatTableDataSource<any>(this.competitions);
-    //     this.dataSource.paginator = this.paginator;
-    //     this.dataSource.sort = this.sort;
-    //   },
-    //   error => console.error(error)
-    // )
+    this.store.dispatch(PropertyActions.loadPropertys({
+      page: this.pageEvent.pageIndex,
+      size: this.pageEvent.pageSize,
+      status: this.selectedStatus
+    }));
+
+    this.pageable.subscribe(
+      data => {
+        if (data) {
+          this.pageEvent.length = data.totalElements;
+          this.dataSource = new MatTableDataSource<any>(data.content);
+          this.dataSource.sort = this.sort;
+        } else {
+          this.dataSource = new MatTableDataSource<any>([]);
+        }
+      },
+      error => console.error(error)
+    );
   }
 
-  ngOnDestroy(): void {
-    this._sub.unsubscribe();
+  handlePageEvent(e: PageEvent) {
+    this.pageEvent.pageSize = e.pageSize;
+    this.pageEvent.pageIndex = e.pageIndex;
+    this.store.dispatch(PropertyActions.loadPropertys({
+      page: this.pageEvent.pageIndex,
+      size: this.pageEvent.pageSize,
+      status: this.selectedStatus
+    }));
   }
 
   announceSortChange(sortState: Sort) {
@@ -53,23 +76,11 @@ export class PropertiesPageComponent {
     }
   }
 
-  filterData(selectedStatus: string): void {
-    if (selectedStatus === "") {
-      this.dataSource = new MatTableDataSource<any>(this.competitions);
-    } else {
-      this.dataSource = new MatTableDataSource<any>(this.competitions.filter(item => item.status === selectedStatus));
-    }
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  openBottomSheet(): void {
-    // this.authService.hasRightAuthority("WRITE_COMPETITION").subscribe(
-    //   (hasRight) => {
-    //     if (hasRight) {
-    //       this._bottomSheet.open(BottomSheetComponent);
-    //     }
-    //   }
-    // );
+  onStatusChange(): void {
+    this.store.dispatch(PropertyActions.loadPropertys({
+      page: this.pageEvent.pageIndex,
+      size: this.pageEvent.pageSize,
+      status: this.selectedStatus
+    }));
   }
 }
