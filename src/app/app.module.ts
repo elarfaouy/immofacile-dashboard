@@ -24,6 +24,8 @@ import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {authenticationInterceptor} from "./interceptor/authentication/authentication.interceptor";
 import {MatIcon} from "@angular/material/icon";
 import { PropertyUpdateStatusDialogComponent } from './component/property-update-status-dialog/property-update-status-dialog.component';
+import { DashboardPageComponent } from './page/dashboard-page/dashboard-page.component';
+import { LoginPageComponent } from './page/login-page/login-page.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { PropertyUpdateStatusDialogComponent } from './component/property-update
     PropertiesPageComponent,
     ArticlesPageComponent,
     ArticleAddDialogComponent,
-    PropertyUpdateStatusDialogComponent
+    PropertyUpdateStatusDialogComponent,
+    DashboardPageComponent,
+    LoginPageComponent
   ],
   imports: [
     BrowserModule,

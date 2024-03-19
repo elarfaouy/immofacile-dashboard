@@ -39,10 +39,6 @@ export class ArticlesPageComponent {
     // )
   }
 
-  ngOnDestroy(): void {
-    this._sub.unsubscribe();
-  }
-
   announceSortChange(sortState: Sort) {
     // This example uses English messages. If your application supports
     // multiple language, you would internationalize these strings.
