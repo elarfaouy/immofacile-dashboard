@@ -83,4 +83,10 @@ export class PropertiesPageComponent {
       status: this.selectedStatus
     }));
   }
+
+  deleteProperty(id: number): void {
+    if (window.confirm("Are you sure you want to delete this property?")) {
+      this.store.dispatch(PropertyActions.deleteProperty({id}));
+    }
+  }
 }

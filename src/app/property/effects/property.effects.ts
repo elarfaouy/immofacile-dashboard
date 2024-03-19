@@ -20,6 +20,17 @@ export class PropertyEffects {
     );
   });
 
+  deleteProperty$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PropertyActions.deleteProperty),
+      concatMap((action) =>
+        this.propertyService.deleteProperty(action.id).pipe(
+          map(() => PropertyActions.deletePropertySuccess({id: action.id})),
+          catchError(error => of(PropertyActions.deletePropertyFailure({error: error.message}))))
+      )
+    );
+  });
+
 
   constructor(
     private actions$: Actions,

@@ -6,12 +6,22 @@ export const propertyFeatureKey = 'property';
 
 export interface State {
   error: string | null;
-  pageableProperties: PageablePropertiesInterface | null;
+  pageableProperties: PageablePropertiesInterface;
 }
 
 export const initialState: State = {
   error: null,
-  pageableProperties: null
+  pageableProperties: {
+    content: [],
+    totalElements: 0,
+    totalPages: 0,
+    last: false,
+    size: 0,
+    empty: false,
+    number: 0,
+    first: false,
+    numberOfElements: 0
+  }
 };
 
 export const reducer = createReducer(
@@ -25,6 +35,18 @@ export const reducer = createReducer(
     ...state,
     error: action.error
   })),
+  on(PropertyActions.deleteProperty, state => state),
+  on(PropertyActions.deletePropertySuccess, (state, action) => ({
+    ...state,
+    pageableProperties: {
+      ...state.pageableProperties,
+      content: state.pageableProperties.content.filter(property => property.id !== action.id) || []
+    }
+  })),
+  on(PropertyActions.deletePropertyFailure, (state, action) => ({
+    ...state,
+    error: action.error
+  }))
 );
 
 export const propertyFeature = createFeature({
