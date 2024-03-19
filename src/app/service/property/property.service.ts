@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {PageablePropertiesInterface} from "../../property/models/PageableProperties.interface";
 import {map} from "rxjs/operators";
+import {PropertyInterface} from "../../property/models/Property.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,14 @@ export class PropertyService {
 
   deleteProperty(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
+  }
+
+  updatePropertyStatus(id: number, status: string): Observable<PropertyInterface> {
+    let observable = this.http.put<any>(`${this.url}/status/${id}`, {status: status});
+
+    return observable.pipe(
+      map(standardInterface => standardInterface.data)
+    );
   }
 }
 

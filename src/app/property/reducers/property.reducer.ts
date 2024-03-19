@@ -46,6 +46,23 @@ export const reducer = createReducer(
   on(PropertyActions.deletePropertyFailure, (state, action) => ({
     ...state,
     error: action.error
+  })),
+  on(PropertyActions.updatePropertyStatus, state => state),
+  on(PropertyActions.updatePropertyStatusSuccess, (state, action) => ({
+    ...state,
+    pageableProperties: {
+      ...state.pageableProperties,
+      content: state.pageableProperties.content.map(property => {
+        if (property.id === action.property.id) {
+          return action.property;
+        }
+        return property;
+      })
+    }
+  })),
+  on(PropertyActions.updatePropertyStatusFailure, (state, action) => ({
+    ...state,
+    error: action.error
   }))
 );
 

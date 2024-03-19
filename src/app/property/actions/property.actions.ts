@@ -1,5 +1,6 @@
 import {createActionGroup, props} from '@ngrx/store';
 import {PageablePropertiesInterface} from "../models/PageableProperties.interface";
+import {PropertyInterface} from "../models/Property.interface";
 
 export const PropertyActions = createActionGroup({
   source: 'Property',
@@ -10,5 +11,9 @@ export const PropertyActions = createActionGroup({
     'Delete Property': props<{ id: number }>(),
     'Delete Property Success': props<{ id: number }>(),
     'Delete Property Failure': props<{ error: string }>(),
+    'Update Property Status': props<{ id: number, status: string }>(),
+    'Update Property Status Success': props<{ property: PropertyInterface }>(),
+    'Update Property Status Failure': props<{ error: string }>(),
+
   }
 });

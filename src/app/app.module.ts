@@ -23,13 +23,15 @@ import {PropertyModule} from "./property/property.module";
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {authenticationInterceptor} from "./interceptor/authentication/authentication.interceptor";
 import {MatIcon} from "@angular/material/icon";
+import { PropertyUpdateStatusDialogComponent } from './component/property-update-status-dialog/property-update-status-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PropertiesPageComponent,
     ArticlesPageComponent,
-    ArticleAddDialogComponent
+    ArticleAddDialogComponent,
+    PropertyUpdateStatusDialogComponent
   ],
   imports: [
     BrowserModule,

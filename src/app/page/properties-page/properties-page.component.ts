@@ -9,6 +9,10 @@ import {PropertyActions} from "../../property/actions/property.actions";
 import {PropertyInterface} from "../../property/models/Property.interface";
 import {selectPropertyPageable} from "../../property/selectors/property.selectors";
 import {PageablePropertiesInterface} from "../../property/models/PageableProperties.interface";
+import {MatDialog} from "@angular/material/dialog";
+import {
+  PropertyUpdateStatusDialogComponent
+} from "../../component/property-update-status-dialog/property-update-status-dialog.component";
 
 @Component({
   selector: 'app-properties-page',
@@ -30,6 +34,7 @@ export class PropertiesPageComponent {
 
   constructor(
     private store: Store,
+    private dialog: MatDialog,
     private _liveAnnouncer: LiveAnnouncer,) {
   }
 
@@ -88,5 +93,14 @@ export class PropertiesPageComponent {
     if (window.confirm("Are you sure you want to delete this property?")) {
       this.store.dispatch(PropertyActions.deleteProperty({id}));
     }
+  }
+
+  updatePropertyStatus(id: number, status: string): void {
+    this.dialog.open(PropertyUpdateStatusDialogComponent, {
+      data: {
+        id: id,
+        status: status
+      }
+    });
   }
 }

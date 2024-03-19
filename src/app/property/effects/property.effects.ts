@@ -31,6 +31,17 @@ export class PropertyEffects {
     );
   });
 
+  updatePropertyStatus$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PropertyActions.updatePropertyStatus),
+      concatMap((action) =>
+        this.propertyService.updatePropertyStatus(action.id, action.status).pipe(
+          map(property => PropertyActions.updatePropertyStatusSuccess({property: property})),
+          catchError(error => of(PropertyActions.updatePropertyStatusFailure({error: error.message}))))
+      )
+    );
+  });
+
 
   constructor(
     private actions$: Actions,
