@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, isDevMode} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
@@ -25,11 +25,20 @@ import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatCardModule} from "@angular/material/card";
+import { ArticlesPageComponent } from './page/articles-page/articles-page.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { ArticleAddDialogComponent } from './component/article-add-dialog/article-add-dialog.component';
+import {MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
+import {MatDivider} from "@angular/material/divider";
 
 @NgModule({
   declarations: [
     AppComponent,
-    PropertiesPageComponent
+    PropertiesPageComponent,
+    ArticlesPageComponent,
+    ArticleAddDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +57,15 @@ import {MatCardModule} from "@angular/material/card";
     ReactiveFormsModule,
     MatInputModule,
     MatRadioModule,
-    MatCardModule
+    MatCardModule,
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !isDevMode()}),
+    MatDialogTitle,
+    MatDivider,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose
   ],
   providers: [
     provideAnimationsAsync()
