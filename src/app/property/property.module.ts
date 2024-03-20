@@ -1,9 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-
-import {PropertyRoutingModule} from './property-routing.module';
 import {StoreModule} from '@ngrx/store';
-import * as fromProperty from './reducers/property.reducer';
+import {propertyFeature} from './reducers/property.reducer';
 import {EffectsModule} from '@ngrx/effects';
 import {PropertyEffects} from './effects/property.effects';
 
@@ -12,8 +10,7 @@ import {PropertyEffects} from './effects/property.effects';
   declarations: [],
   imports: [
     CommonModule,
-    PropertyRoutingModule,
-    StoreModule.forFeature(fromProperty.propertyFeatureKey, fromProperty.reducer),
+    StoreModule.forFeature(propertyFeature),
     EffectsModule.forFeature([PropertyEffects]),
   ]
 })

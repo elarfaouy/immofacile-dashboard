@@ -1,7 +1,11 @@
-import {HttpInterceptorFn} from '@angular/common/http';
+import {HttpErrorResponse, HttpInterceptorFn} from '@angular/common/http';
+import {inject} from "@angular/core";
+import {AuthenticationService} from "../../service/authentication/authentication.service";
+import {catchError} from "rxjs/operators";
+import {throwError} from "rxjs";
 
 export const authenticationInterceptor: HttpInterceptorFn = (req, next) => {
-  // const authService = inject(AuthenticationService);
+  const authService = inject(AuthenticationService);
   const whitelistUrls = ['api/auth/login', 'api/auth/register', 'api/auth/refresh-token'];
   let token = localStorage.getItem("access-token");
 
@@ -11,14 +15,16 @@ export const authenticationInterceptor: HttpInterceptorFn = (req, next) => {
     });
   }
 
-  return next(req);
-  // .pipe(
-  //   catchError((error: HttpErrorResponse) => {
-  //     if (error.status == 401) {
-  //       authService.refreshToken().subscribe();
-  //     }
-  //
-  //     return next(req);
-  //   })
-  // );
+  return next(req)
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status == 500) {
+          authService.refreshToken().subscribe();
+        }
+
+        return throwError(() => new Error("No or Invalid token"));
+
+        // return next(req);
+      })
+    );
 };

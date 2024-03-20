@@ -23,9 +23,12 @@ import {PropertyModule} from "./property/property.module";
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {authenticationInterceptor} from "./interceptor/authentication/authentication.interceptor";
 import {MatIcon} from "@angular/material/icon";
-import { PropertyUpdateStatusDialogComponent } from './component/property-update-status-dialog/property-update-status-dialog.component';
-import { DashboardPageComponent } from './page/dashboard-page/dashboard-page.component';
-import { LoginPageComponent } from './page/login-page/login-page.component';
+import {
+  PropertyUpdateStatusDialogComponent
+} from './component/property-update-status-dialog/property-update-status-dialog.component';
+import {DashboardPageComponent} from './page/dashboard-page/dashboard-page.component';
+import {LoginPageComponent} from './page/login-page/login-page.component';
+import {UserModule} from "./user/user.module";
 
 @NgModule({
   declarations: [
@@ -44,6 +47,7 @@ import { LoginPageComponent } from './page/login-page/login-page.component';
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !isDevMode()}),
     PropertyModule,
+    UserModule,
     MatSidenavModule,
     MatSidenavContainer,
     MatAnchor,
@@ -59,7 +63,7 @@ import { LoginPageComponent } from './page/login-page/login-page.component';
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
-    MatIcon
+    MatIcon,
   ],
   providers: [
     provideAnimationsAsync(),
