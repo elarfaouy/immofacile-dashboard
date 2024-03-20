@@ -29,6 +29,9 @@ import {
 import {DashboardPageComponent} from './page/dashboard-page/dashboard-page.component';
 import {LoginPageComponent} from './page/login-page/login-page.component';
 import {UserModule} from "./user/user.module";
+import { ReportPageComponent } from './page/report-page/report-page.component';
+import {ReportModule} from "./report/report.module";
+import { ReportUpdateStatusDialogComponent } from './component/report-update-status-dialog/report-update-status-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,9 @@ import {UserModule} from "./user/user.module";
     ArticleAddDialogComponent,
     PropertyUpdateStatusDialogComponent,
     DashboardPageComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    ReportPageComponent,
+    ReportUpdateStatusDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +53,7 @@ import {UserModule} from "./user/user.module";
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: !isDevMode()}),
     PropertyModule,
     UserModule,
+    ReportModule,
     MatSidenavModule,
     MatSidenavContainer,
     MatAnchor,
