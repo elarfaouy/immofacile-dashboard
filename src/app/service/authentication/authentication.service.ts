@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError, map, Observable, of, tap, throwError} from "rxjs";
-import {UserInterface} from "../../user/models/user.interface";
+import {UserAuthInterface} from "../../user/models/user-auth.interface";
 import {AuthResponseInterface} from "../../user/models/auth-response.interface";
 
 @Injectable({
@@ -9,16 +9,16 @@ import {AuthResponseInterface} from "../../user/models/auth-response.interface";
 })
 export class AuthenticationService {
   private url: string = "http://localhost:8080/api/auth/";
-  private _user: UserInterface | null = null;
+  private _user: UserAuthInterface | null = null;
 
   constructor(private http: HttpClient) {
   }
 
-  set user(user: UserInterface) {
+  set user(user: UserAuthInterface) {
     this._user = user;
   }
 
-  get user(): Observable<UserInterface> {
+  get user(): Observable<UserAuthInterface> {
     if (!this._user) {
       let userObservable = this.profile();
       userObservable.subscribe(
@@ -34,8 +34,8 @@ export class AuthenticationService {
     return this.http.post<AuthResponseInterface>(this.url + 'login', {username, password});
   }
 
-  profile(): Observable<UserInterface> {
-    return this.http.get<UserInterface>(this.url + 'profile');
+  profile(): Observable<UserAuthInterface> {
+    return this.http.get<UserAuthInterface>(this.url + 'profile');
   }
 
   isAuthenticate(): Observable<boolean> {

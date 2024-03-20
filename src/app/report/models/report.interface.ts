@@ -1,5 +1,5 @@
 import {PropertyInterface} from "../../property/models/Property.interface";
-import {UserInterface} from "../../user/models/user.interface";
+import {UserAuthInterface} from "../../user/models/user-auth.interface";
 
 export interface ReportInterface {
   id: number;
@@ -7,5 +7,5 @@ export interface ReportInterface {
   reason: string;
   reasonDetail: string;
   property: PropertyInterface;
-  reporter: UserInterface;
+  reporter: UserAuthInterface;
 }

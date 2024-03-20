@@ -10,6 +10,11 @@ export const selectUserKeys = createSelector(
   (state) => state.keys
 );
 
+export const selectUsers = createSelector(
+  selectUserState,
+  (state) => state.users
+);
+
 export const selectUserError = createSelector(
   selectUserState,
   (state) => state.error

@@ -22,16 +22,21 @@ import {MatDividerModule} from "@angular/material/divider";
 import {PropertyModule} from "./property/property.module";
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {authenticationInterceptor} from "./interceptor/authentication/authentication.interceptor";
-import {MatIcon} from "@angular/material/icon";
+import {MatIconModule} from "@angular/material/icon";
 import {
   PropertyUpdateStatusDialogComponent
 } from './component/property-update-status-dialog/property-update-status-dialog.component';
 import {DashboardPageComponent} from './page/dashboard-page/dashboard-page.component';
 import {LoginPageComponent} from './page/login-page/login-page.component';
 import {UserModule} from "./user/user.module";
-import { ReportPageComponent } from './page/report-page/report-page.component';
+import {ReportPageComponent} from './page/report-page/report-page.component';
 import {ReportModule} from "./report/report.module";
-import { ReportUpdateStatusDialogComponent } from './component/report-update-status-dialog/report-update-status-dialog.component';
+import {
+  ReportUpdateStatusDialogComponent
+} from './component/report-update-status-dialog/report-update-status-dialog.component';
+import {UserPageComponent} from './page/user-page/user-page.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
+import { AgenciesPageComponent } from './page/agencies-page/agencies-page.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +48,9 @@ import { ReportUpdateStatusDialogComponent } from './component/report-update-sta
     DashboardPageComponent,
     LoginPageComponent,
     ReportPageComponent,
-    ReportUpdateStatusDialogComponent
+    ReportUpdateStatusDialogComponent,
+    UserPageComponent,
+    AgenciesPageComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +76,8 @@ import { ReportUpdateStatusDialogComponent } from './component/report-update-sta
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
-    MatIcon,
+    MatIconModule,
+    MatTooltipModule,
   ],
   providers: [
     provideAnimationsAsync(),
