@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {Router} from "@angular/router";
-import {AuthenticationService} from "../../service/authentication/authentication.service";
+import {select, Store} from "@ngrx/store";
+import {UserActions} from "../../user/actions/user.actions";
+import {selectUserError, selectUserKeys} from "../../user/selectors/user.selectors";
 
 @Component({
   selector: 'app-login-page',
@@ -10,21 +12,26 @@ import {AuthenticationService} from "../../service/authentication/authentication
 export class LoginPageComponent {
   username: string = "";
   password: string = "";
+  keys = this.store.pipe(select(selectUserKeys));
+  error = this.store.pipe(select(selectUserError));
 
   constructor(
-    private authService: AuthenticationService,
+    private store: Store,
     private route: Router
   ) {
   }
 
   login() {
-    this.authService.login(this.username, this.password).subscribe(
+    this.store.dispatch(UserActions.login({username: this.username, password: this.password}));
+    this.keys.subscribe(
       (value) => {
-        localStorage.setItem("access-token", value["access-token"]);
-        localStorage.setItem("token-expiration", value["token-expiration"])
-        localStorage.setItem("refresh-token", value["refresh-token"]);
+        if (value.accessToken !== "" && value.tokenExpiration !== "" && value.refreshToken !== ""){
+          localStorage.setItem("access-token", value.accessToken);
+          localStorage.setItem("token-expiration", value.tokenExpiration)
+          localStorage.setItem("refresh-token", value.refreshToken);
 
-        this.route.navigate(['/dashboard']);
+          this.route.navigate(['/dashboard']);
+        }
       }
     );
   }
