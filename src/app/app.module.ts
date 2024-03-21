@@ -37,6 +37,8 @@ import {
 import {UserPageComponent} from './page/user-page/user-page.component';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { AgenciesPageComponent } from './page/agencies-page/agencies-page.component';
+import {ArticleModule} from "./article/article.module";
+import { ArticleUpdateStatusDialogComponent } from './component/article-update-status-dialog/article-update-status-dialog.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,8 @@ import { AgenciesPageComponent } from './page/agencies-page/agencies-page.compon
     ReportPageComponent,
     ReportUpdateStatusDialogComponent,
     UserPageComponent,
-    AgenciesPageComponent
+    AgenciesPageComponent,
+    ArticleUpdateStatusDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -61,6 +64,7 @@ import { AgenciesPageComponent } from './page/agencies-page/agencies-page.compon
     PropertyModule,
     UserModule,
     ReportModule,
+    ArticleModule,
     MatSidenavModule,
     MatSidenavContainer,
     MatAnchor,

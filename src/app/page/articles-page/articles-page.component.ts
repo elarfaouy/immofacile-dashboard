@@ -1,12 +1,19 @@
 import {Component, ViewChild} from '@angular/core';
-import {Subscription} from "rxjs";
+import {Observable} from "rxjs";
 import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
 import {MatSort, Sort} from "@angular/material/sort";
-import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {MatDialog} from "@angular/material/dialog";
 import {ArticleAddDialogComponent} from "../../component/article-add-dialog/article-add-dialog.component";
+import {ArticleInterface} from "../../article/models/article.interface";
+import {PageableArticlesInterface} from "../../article/models/pageable-articles.interface";
+import {select, Store} from "@ngrx/store";
+import {selectPageableArticles} from "../../article/selectors/article.selectors";
+import {ArticleActions} from "../../article/actions/article.actions";
+import {PageEvent} from "@angular/material/paginator";
+import {
+  ArticleUpdateStatusDialogComponent
+} from "../../component/article-update-status-dialog/article-update-status-dialog.component";
 
 @Component({
   selector: 'app-articles-page',
@@ -14,29 +21,53 @@ import {ArticleAddDialogComponent} from "../../component/article-add-dialog/arti
   styleUrl: './articles-page.component.css'
 })
 export class ArticlesPageComponent {
-  private _sub!: Subscription;
+  pageEvent: {
+    pageIndex: number;
+    pageSize: number;
+    length: number;
+  } = {pageIndex: 0, pageSize: 5, length: 0};
+  articles: ArticleInterface[] = [];
+  pageableArticles: Observable<PageableArticlesInterface> = this.store.pipe(select(selectPageableArticles));
   statusFilter: string = "";
-  displayedColumns: string[] = ["id", "title", "author", "category", "publishedAt", "status", "actions"];
-  competitions: any[] = [];
-  dataSource = new MatTableDataSource<any>(this.competitions);
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  displayedColumns: string[] = ["title", "author", "category", "views", "status", "actions"];
+  dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    public dialog: MatDialog,
+    public store: Store,
+    private dialog: MatDialog,
     private _liveAnnouncer: LiveAnnouncer,) {
   }
 
   ngOnInit(): void {
-    // this._sub = this._competitionService.getCompetitions().subscribe(
-    //   data => {
-    //     this.competitions = data.content;
-    //     this.dataSource = new MatTableDataSource<any>(this.competitions);
-    //     this.dataSource.paginator = this.paginator;
-    //     this.dataSource.sort = this.sort;
-    //   },
-    //   error => console.error(error)
-    // )
+    this.store.dispatch(ArticleActions.loadArticles({
+      page: this.pageEvent.pageIndex,
+      size: this.pageEvent.pageSize,
+      status: this.statusFilter
+    }));
+
+    this.pageableArticles.subscribe(
+      data => {
+        if (data) {
+          this.pageEvent.length = data.totalElements;
+          this.dataSource = new MatTableDataSource<any>(data.content);
+          this.dataSource.sort = this.sort;
+        } else {
+          this.dataSource = new MatTableDataSource<any>([]);
+        }
+      },
+      error => console.error(error)
+    );
+
+  }
+
+  handlePageEvent(event: PageEvent): void {
+    this.pageEvent = event;
+    this.store.dispatch(ArticleActions.loadArticles({
+      page: this.pageEvent.pageIndex,
+      size: this.pageEvent.pageSize,
+      status: this.statusFilter
+    }));
   }
 
   announceSortChange(sortState: Sort) {
@@ -51,21 +82,30 @@ export class ArticlesPageComponent {
     }
   }
 
-  filterData(selectedStatus: string): void {
-    if (selectedStatus === "") {
-      this.dataSource = new MatTableDataSource<any>(this.competitions);
-    } else {
-      this.dataSource = new MatTableDataSource<any>(this.competitions.filter(item => item.status === selectedStatus));
-    }
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  onStatusChange(): void {
+    this.store.dispatch(ArticleActions.loadArticles({
+      page: this.pageEvent.pageIndex,
+      size: this.pageEvent.pageSize,
+      status: this.statusFilter
+    }));
   }
 
   openArticleAddDialog(): void {
-    const dialogRef = this.dialog.open(ArticleAddDialogComponent);
+    this.dialog.open(ArticleAddDialogComponent);
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+  updateArticleStatus(slug: string, status: string): void {
+    this.dialog.open(ArticleUpdateStatusDialogComponent, {
+      data: {
+        slug: slug,
+        status: status
+      }
     });
+  }
+
+  deleteArticle(slug: string): void {
+    if (confirm("Are you sure you want to delete this article?")) {
+      this.store.dispatch(ArticleActions.deleteArticle({slug}));
+    }
   }
 }

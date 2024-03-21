@@ -14,8 +14,3 @@ export const selectPropertyPageable = createSelector(
   selectPropertyState,
   state => state.pageableProperties
 );
-
-export const selectPropertiesList = createSelector(
-  selectPropertyState,
-  state => state.pageableProperties?.content
-);
