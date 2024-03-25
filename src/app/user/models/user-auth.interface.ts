@@ -4,5 +4,5 @@ export interface UserAuthInterface {
   username: string;
   email: string;
   role: string;
-  permissions: string[];
+  authorities: string[];
 }

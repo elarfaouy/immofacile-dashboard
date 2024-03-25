@@ -32,18 +32,26 @@ export const initialState: State = {
 
 export const reducer = createReducer(
   initialState,
-  on(ArticleActions.loadArticles, state => state),
+  on(ArticleActions.loadArticles, state => ({
+    ...state,
+    error: null
+  })),
   on(ArticleActions.loadArticlesSuccess, (state, action) => ({
     ...state,
+    error: null,
     pageableArticles: action.data
   })),
   on(ArticleActions.loadArticlesFailure, (state, action) => ({
     ...state,
     error: action.error
   })),
-  on(ArticleActions.storeArticle, state => state),
+  on(ArticleActions.storeArticle, state => ({
+    ...state,
+    error: null
+  })),
   on(ArticleActions.storeArticleSuccess, (state, action) => ({
     ...state,
+    error: null,
     pageableArticles: {
       ...state.pageableArticles,
       content: [...state.pageableArticles.content, action.data]
@@ -53,15 +61,25 @@ export const reducer = createReducer(
     ...state,
     error: action.error
   })),
-  on(ArticleActions.storeArticleImage, state => state),
-  on(ArticleActions.storeArticleImageSuccess, (state, action) => state),
+  on(ArticleActions.storeArticleImage, state => ({
+    ...state,
+    error: null
+  })),
+  on(ArticleActions.storeArticleImageSuccess, (state, action) => ({
+    ...state,
+    error: null
+  })),
   on(ArticleActions.storeArticleImageFailure, (state, action) => ({
     ...state,
     error: action.error
   })),
-  on(ArticleActions.updateArticleStatus, state => state),
+  on(ArticleActions.updateArticleStatus, state => ({
+    ...state,
+    error: null
+  })),
   on(ArticleActions.updateArticleStatusSuccess, (state, action) => ({
     ...state,
+    error: null,
     pageableArticles: {
       ...state.pageableArticles,
       content: state.pageableArticles.content.map(article => {
@@ -76,9 +94,13 @@ export const reducer = createReducer(
     ...state,
     error: action.error
   })),
-  on(ArticleActions.deleteArticle, state => state),
+  on(ArticleActions.deleteArticle, state => ({
+    ...state,
+    error: null
+  })),
   on(ArticleActions.deleteArticleSuccess, (state, action) => ({
     ...state,
+    error: null,
     pageableArticles: {
       ...state.pageableArticles,
       content: state.pageableArticles.content.filter(article => article.slug !== action.slug)
@@ -88,18 +110,26 @@ export const reducer = createReducer(
     ...state,
     error: action.error
   })),
-  on(ArticleActions.loadCategories, state => state),
+  on(ArticleActions.loadCategories, state => ({
+    ...state,
+    error: null
+  })),
   on(ArticleActions.loadCategoriesSuccess, (state, action) => ({
     ...state,
+    error: null,
     categories: action.data
   })),
   on(ArticleActions.loadCategoriesFailure, (state, action) => ({
     ...state,
     error: action.error
   })),
-  on(ArticleActions.loadTags, state => state),
+  on(ArticleActions.loadTags, state => ({
+    ...state,
+    error: null
+  })),
   on(ArticleActions.loadTagsSuccess, (state, action) => ({
     ...state,
+    error: null,
     tags: action.data
   })),
   on(ArticleActions.loadTagsFailure, (state, action) => ({

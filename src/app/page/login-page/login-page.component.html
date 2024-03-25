@@ -10,13 +10,19 @@
       </div>
       <div class="w-full">
         <label for="password" class="sr-only">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter your Password" [(ngModel)]="password"
-               class="w-full p-4 mt-4 px-6 py-4 leading-tight text-lg text-gray-600 border-neutral-800 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline focus:text-black"/>
+        <div class="relative">
+          <input [type]="hide ? 'password' : 'text'" id="password" name="password" placeholder="Enter your Password" [(ngModel)]="password"
+                 class="w-full p-4 mt-4 px-6 py-4 leading-tight text-lg text-gray-600 border-neutral-800 border rounded-lg shadow appearance-none focus:outline-none focus:shadow-outline focus:text-black"/>
+          <button id="password-icon" mat-icon-button (click)="hide = !hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </div>
+
       </div>
       <button type="button" (click)="login()" class="w-full text-lg px-12 py-3 bg-violet-600 text-white rounded-lg mt-8">Log In</button>
     </form>
     <div class="max-md:w-full">
-      <p class="mt-2"><a href="#" class="text-violet-600">Forgot password?</a></p>
+      <p class="mt-2"><a href="http://localhost:4200/forgot-password" target="_blank" class="text-violet-600">Forgot password?</a></p>
     </div>
   </section>
 </main>

@@ -24,7 +24,7 @@ export class PropertiesPageComponent {
     pageIndex: number;
     pageSize: number;
     length: number;
-  } = {pageIndex: 0, pageSize: 2, length: 0};
+  } = {pageIndex: 0, pageSize: 5, length: 0};
   properties: PropertyInterface[] = [];
   pageable: Observable<PageablePropertiesInterface | null> = this.store.pipe(select(selectPropertyPageable));
   selectedStatus: string = "";

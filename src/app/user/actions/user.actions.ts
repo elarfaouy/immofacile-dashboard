@@ -1,6 +1,7 @@
-import {createActionGroup, props} from '@ngrx/store';
+import {createActionGroup, emptyProps, props} from '@ngrx/store';
 import {AuthResponseInterface} from "../models/auth-response.interface";
 import {UserInterface} from "../models/user.interface";
+import {UserAuthInterface} from "../models/user-auth.interface";
 
 export const UserActions = createActionGroup({
   source: 'User',
@@ -23,5 +24,8 @@ export const UserActions = createActionGroup({
     'Accept User As Agent': props<{ username: string }>(),
     'Accept User As Agent Success': props<{ data: UserInterface }>(),
     'Accept User As Agent Failure': props<{ error: string }>(),
+    'Load Profile': emptyProps(),
+    'Load Profile Success': props<{ data: UserAuthInterface }>(),
+    'Load Profile Failure': props<{ error: string }>(),
   }
 });

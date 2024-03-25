@@ -11,7 +11,7 @@ export interface State {
     refreshToken: string;
   };
   users: UserInterface[];
-  error: string;
+  error: string | null
 }
 
 export const initialState: State = {
@@ -21,14 +21,18 @@ export const initialState: State = {
     refreshToken: "",
   },
   users: [],
-  error: "",
+  error: null,
 };
 
 export const reducer = createReducer(
   initialState,
-  on(UserActions.login, (state, {username, password}) => ({...state})),
+  on(UserActions.login, (state, {username, password}) => ({
+    ...state,
+    error: null
+  })),
   on(UserActions.loginSuccess, (state, {data}) => ({
     ...state,
+    error: null,
     keys: {
       accessToken: data["access-token"],
       tokenExpiration: data["token-expiration"],
@@ -39,50 +43,83 @@ export const reducer = createReducer(
     ...state,
     error: error
   })),
-  on(UserActions.loadUsers, (state, {onlyWantToBeAgent}) => ({...state})),
+  on(UserActions.loadUsers, (state, {onlyWantToBeAgent}) => ({
+    ...state,
+    error: null
+  })),
   on(UserActions.loadUsersSuccess, (state, {data}) => ({
     ...state,
-    users: data
+    users: data,
+    error: null
   })),
   on(UserActions.loadUsersFailure, (state, {error}) => ({
     ...state,
     error: error
   })),
-  on(UserActions.suspendUser, (state, {username}) => ({...state})),
+  on(UserActions.suspendUser, (state, {username}) => ({
+    ...state,
+    error: null
+  })),
   on(UserActions.suspendUserSuccess, (state, {data}) => ({
     ...state,
+    error: null,
     users: state.users.map(user => user.username === data.username ? data : user)
   })),
   on(UserActions.suspendUserFailure, (state, {error}) => ({
     ...state,
     error: error
   })),
-  on(UserActions.unsuspendUser, (state, {username}) => ({...state})),
+  on(UserActions.unsuspendUser, (state, {username}) => ({
+    ...state,
+    error: null
+  })),
   on(UserActions.unsuspendUserSuccess, (state, {data}) => ({
     ...state,
+    error: null,
     users: state.users.map(user => user.username === data.username ? data : user)
   })),
   on(UserActions.unsuspendUserFailure, (state, {error}) => ({
     ...state,
     error: error
   })),
-  on(UserActions.deleteUser, (state, {username}) => ({...state})),
+  on(UserActions.deleteUser, (state, {username}) => ({
+    ...state,
+    error: null
+  })),
   on(UserActions.deleteUserSuccess, (state, {username}) => ({
     ...state,
+    error: null,
     users: state.users.filter(user => user.username !== username)
   })),
   on(UserActions.deleteUserFailure, (state, {error}) => ({
     ...state,
     error: error
   })),
-  on(UserActions.acceptUserAsAgent, (state, {username}) => ({...state})),
+  on(UserActions.acceptUserAsAgent, (state, {username}) => ({
+    ...state,
+    error: null,
+  })),
   on(UserActions.acceptUserAsAgentSuccess, (state, {data}) => ({
     ...state,
+    error: null,
     users: state.users.filter(user => user.username !== data.username)
   })),
   on(UserActions.acceptUserAsAgentFailure, (state, {error}) => ({
     ...state,
     error: error
+  })),
+  on(UserActions.loadProfile, state => ({
+    ...state,
+    error: null
+  })),
+  on(UserActions.loadProfileSuccess, (state, action) => ({
+    ...state,
+    error: null,
+    profile: action.data
+  })),
+  on(UserActions.loadProfileFailure, (state, action) => ({
+    ...state,
+    error: action.error
   })),
 );
 

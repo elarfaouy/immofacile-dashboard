@@ -3,6 +3,8 @@ import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {catchError, map, Observable, of, tap, throwError} from "rxjs";
 import {UserAuthInterface} from "../../user/models/user-auth.interface";
 import {AuthResponseInterface} from "../../user/models/auth-response.interface";
+import {ToastrService} from "ngx-toastr";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,11 @@ export class AuthenticationService {
   private url: string = "http://localhost:8080/api/auth/";
   private _user: UserAuthInterface | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private toast: ToastrService,
+    private router: Router,
+    private http: HttpClient,
+    ) {
   }
 
   set user(user: UserAuthInterface) {
@@ -55,17 +61,21 @@ export class AuthenticationService {
           map(() => true)
         );
     }
-    // this.toast.error("You are not authenticated", "Error")
+    this.toast.error("You are not authenticated")
+
+    this.router.navigate(["/login"]);
 
     return of(false);
   }
 
   hasRightAuthority(authority: string): Observable<boolean> {
     return this.user.pipe(
-      map(user => user.permissions != null && user.permissions.includes(authority)),
+      map(user => user.authorities.length > 0 && user.authorities.includes(authority)),
       tap((value) => {
           if (!value) {
-            // this.toast.error("You don't have the right authority", "Error");
+            this.toast.error("You don't have the right authority");
+            this.clearToken();
+            this.router.navigate(["/"]);
           }
         }
       )

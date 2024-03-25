@@ -79,7 +79,6 @@ export class ArticleAddDialogComponent {
 
           this.error.subscribe(
             error => {
-              console.log(error);
               if (error == null) {
                 this.dialogRef.close();
               }

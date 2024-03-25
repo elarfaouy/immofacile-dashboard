@@ -7,11 +7,14 @@ import {DashboardPageComponent} from "./page/dashboard-page/dashboard-page.compo
 import {ReportPageComponent} from "./page/report-page/report-page.component";
 import {UserPageComponent} from "./page/user-page/user-page.component";
 import {AgenciesPageComponent} from "./page/agencies-page/agencies-page.component";
+import {authenticateGuard} from "./guard/authenticate/authenticate.guard";
+import {hasRightAuthorityGuard} from "./guard/has-right-authority/has-right-authority.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login', component: LoginPageComponent},
-  {path: 'dashboard', component: DashboardPageComponent, children: [
+  {path: 'dashboard', component: DashboardPageComponent, canActivate: [authenticateGuard, hasRightAuthorityGuard], data: {authority: "ROLE_ADMIN"},
+    children: [
       {path: '', redirectTo: 'properties', pathMatch: 'full'},
       {path: 'properties', component: PropertiesPageComponent},
       {path: 'articles', component: ArticlesPageComponent},

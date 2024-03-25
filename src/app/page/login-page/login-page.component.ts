@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {select, Store} from "@ngrx/store";
 import {UserActions} from "../../user/actions/user.actions";
 import {selectUserError, selectUserKeys} from "../../user/selectors/user.selectors";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-login-page',
@@ -10,6 +11,7 @@ import {selectUserError, selectUserKeys} from "../../user/selectors/user.selecto
   styleUrl: './login-page.component.css'
 })
 export class LoginPageComponent {
+  hide = true;
   username: string = "";
   password: string = "";
   keys = this.store.pipe(select(selectUserKeys));
@@ -17,7 +19,8 @@ export class LoginPageComponent {
 
   constructor(
     private store: Store,
-    private route: Router
+    private route: Router,
+    private toast: ToastrService
   ) {
   }
 
@@ -31,6 +34,14 @@ export class LoginPageComponent {
           localStorage.setItem("refresh-token", value.refreshToken);
 
           this.route.navigate(['/dashboard']);
+        }
+      }
+    );
+
+    this.error.subscribe(
+      (value) => {
+        if (value !== null){
+          this.toast.error(value);
         }
       }
     );

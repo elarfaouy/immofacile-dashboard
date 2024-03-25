@@ -82,6 +82,18 @@ export class UserEffects {
     );
   });
 
+  loadProfile$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserActions.loadProfile),
+      concatMap(() =>
+        this.authService.user.pipe(
+          map(data => UserActions.loadProfileSuccess({data})),
+          catchError(error => of(UserActions.loadProfileFailure({error: error.error.message})))
+        )
+      )
+    );
+  });
+
 
   constructor(
     private actions$: Actions,

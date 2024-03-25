@@ -39,6 +39,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import { AgenciesPageComponent } from './page/agencies-page/agencies-page.component';
 import {ArticleModule} from "./article/article.module";
 import { ArticleUpdateStatusDialogComponent } from './component/article-update-status-dialog/article-update-status-dialog.component';
+import {provideToastr} from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -85,6 +86,10 @@ import { ArticleUpdateStatusDialogComponent } from './component/article-update-s
   ],
   providers: [
     provideAnimationsAsync(),
+    provideToastr({
+      timeOut: 2000,
+      preventDuplicates: true,
+    }),
     provideHttpClient(withInterceptors([authenticationInterceptor]))
   ],
   bootstrap: [AppComponent]

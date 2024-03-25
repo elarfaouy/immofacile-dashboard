@@ -26,7 +26,7 @@ export class ArticleEffects {
       concatMap((action: { title: string; content: string; category: number; tags: number[] }) =>
         this.articleService.storeArticle(action.title, action.content, action.category, action.tags).pipe(
           map(data => ArticleActions.storeArticleSuccess({data})),
-          catchError(error => of(ArticleActions.storeArticleFailure({error}))))
+          catchError(error => of(ArticleActions.storeArticleFailure({error: error.error.message}))))
       )
     );
   });
@@ -37,7 +37,7 @@ export class ArticleEffects {
       concatMap((action) =>
         this.articleService.storeArticleImage(action.slug, action.cover).pipe(
           map(data => ArticleActions.storeArticleImageSuccess({data})),
-          catchError(error => of(ArticleActions.storeArticleImageFailure({error}))))
+          catchError(error => of(ArticleActions.storeArticleImageFailure({error: error.error.message}))))
       )
     );
   });
@@ -48,7 +48,7 @@ export class ArticleEffects {
       concatMap((action) =>
         this.articleService.updateArticleStatus(action.slug, action.status).pipe(
           map(data => ArticleActions.updateArticleStatusSuccess({data})),
-          catchError(error => of(ArticleActions.updateArticleStatusFailure({error}))))
+          catchError(error => of(ArticleActions.updateArticleStatusFailure({error: error.error.message}))))
       )
     );
   });
@@ -59,7 +59,7 @@ export class ArticleEffects {
       concatMap((action) =>
         this.articleService.deleteArticle(action.slug).pipe(
           map(() => ArticleActions.deleteArticleSuccess({slug: action.slug})),
-          catchError(error => of(ArticleActions.deleteArticleFailure({error}))))
+          catchError(error => of(ArticleActions.deleteArticleFailure({error: error.error.message}))))
       )
     );
   });
@@ -70,7 +70,7 @@ export class ArticleEffects {
       concatMap(() =>
         this.articleService.getCategories().pipe(
           map(data => ArticleActions.loadCategoriesSuccess({data})),
-          catchError(error => of(ArticleActions.loadCategoriesFailure({error}))))
+          catchError(error => of(ArticleActions.loadCategoriesFailure({error: error.error.message}))))
       )
     );
   });
@@ -81,7 +81,7 @@ export class ArticleEffects {
       concatMap(() =>
         this.articleService.getTags().pipe(
           map(data => ArticleActions.loadTagsSuccess({data})),
-          catchError(error => of(ArticleActions.loadTagsFailure({error}))))
+          catchError(error => of(ArticleActions.loadTagsFailure({error: error.error.message}))))
       )
     );
   });

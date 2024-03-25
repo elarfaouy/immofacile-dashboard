@@ -8,12 +8,13 @@ import {ArticleAddDialogComponent} from "../../component/article-add-dialog/arti
 import {ArticleInterface} from "../../article/models/article.interface";
 import {PageableArticlesInterface} from "../../article/models/pageable-articles.interface";
 import {select, Store} from "@ngrx/store";
-import {selectPageableArticles} from "../../article/selectors/article.selectors";
+import {selectArticleError, selectPageableArticles} from "../../article/selectors/article.selectors";
 import {ArticleActions} from "../../article/actions/article.actions";
 import {PageEvent} from "@angular/material/paginator";
 import {
   ArticleUpdateStatusDialogComponent
 } from "../../component/article-update-status-dialog/article-update-status-dialog.component";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-articles-page',
@@ -31,11 +32,13 @@ export class ArticlesPageComponent {
   statusFilter: string = "";
   displayedColumns: string[] = ["title", "author", "category", "views", "status", "actions"];
   dataSource = new MatTableDataSource<any>([]);
+  error$ = this.store.select(selectArticleError);
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     public store: Store,
     private dialog: MatDialog,
+    private toast: ToastrService,
     private _liveAnnouncer: LiveAnnouncer,) {
   }
 
@@ -59,6 +62,13 @@ export class ArticlesPageComponent {
       error => console.error(error)
     );
 
+    this.error$.subscribe(
+      error => {
+        if (error !== null) {
+          this.toast.error(error);
+        }
+      }
+    )
   }
 
   handlePageEvent(event: PageEvent): void {
